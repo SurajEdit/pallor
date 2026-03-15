@@ -1,0 +1,7 @@
+{
+  "name": "Kavya Beauty Parlour",
+  "description": "Luxury beauty salon in Badarpur, New Delhi offering bridal makeup, hair styling, and skincare services.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

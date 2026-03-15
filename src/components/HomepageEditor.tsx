@@ -18,8 +18,26 @@ import {
   ChevronRight,
   ChevronDown,
   ArrowUp,
-  ArrowDown
+  ArrowDown,
+  GripVertical
 } from 'lucide-react';
+import { 
+  DndContext, 
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { useContentStore } from '../contentStore';
 import { HomepageContent, Service, GalleryItem, Review } from '../types';
 
@@ -177,6 +195,29 @@ export default function HomepageEditor() {
     });
   };
 
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      setLocalContent((content) => {
+        const oldIndex = content.services.findIndex((s) => s.id === active.id);
+        const newIndex = content.services.findIndex((s) => s.id === over.id);
+
+        return {
+          ...content,
+          services: arrayMove(content.services, oldIndex, newIndex),
+        };
+      });
+    }
+  };
+
   const tabs = [
     { id: 'hero', label: 'Hero Section', icon: Layout },
     { id: 'services', label: 'Services', icon: Scissors },
@@ -309,59 +350,25 @@ export default function HomepageEditor() {
                 </div>
                 
                 <div className="space-y-4">
-                  {localContent.services.map((service) => (
-                    <div key={service.id} className="p-6 rounded-2xl border border-brand-dark/10 bg-brand-beige/10">
-                      <div className="flex justify-between items-start mb-4">
-                        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div>
-                            <label className="block text-xs font-bold text-brand-dark/40 mb-1 uppercase">Title</label>
-                            <input 
-                              type="text" 
-                              value={service.title}
-                              onChange={(e) => updateService(service.id, 'title', e.target.value)}
-                              className="w-full px-3 py-2 rounded-lg border border-brand-dark/10 focus:border-brand-gold outline-none"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-bold text-brand-dark/40 mb-1 uppercase">Price</label>
-                            <input 
-                              type="text" 
-                              value={service.price}
-                              onChange={(e) => updateService(service.id, 'price', e.target.value)}
-                              className="w-full px-3 py-2 rounded-lg border border-brand-dark/10 focus:border-brand-gold outline-none"
-                            />
-                          </div>
-                        </div>
-                        <button 
-                          onClick={() => deleteService(service.id)}
-                          className="ml-4 p-2 text-red-500 hover:bg-red-50 rounded-lg transition-all"
-                        >
-                          <Trash2 size={18} />
-                        </button>
-                      </div>
-                      <div className="mb-4">
-                        <label className="block text-xs font-bold text-brand-dark/40 mb-1 uppercase">Description</label>
-                        <textarea 
-                          value={service.description}
-                          onChange={(e) => updateService(service.id, 'description', e.target.value)}
-                          rows={2}
-                          className="w-full px-3 py-2 rounded-lg border border-brand-dark/10 focus:border-brand-gold outline-none"
+                  <DndContext 
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}
+                  >
+                    <SortableContext 
+                      items={localContent.services.map(s => s.id)}
+                      strategy={verticalListSortingStrategy}
+                    >
+                      {localContent.services.map((service) => (
+                        <SortableServiceItem 
+                          key={service.id} 
+                          service={service} 
+                          updateService={updateService}
+                          deleteService={deleteService}
                         />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-brand-dark/40 mb-1 uppercase">Image URL</label>
-                        <div className="flex gap-3">
-                          <input 
-                            type="text" 
-                            value={service.image}
-                            onChange={(e) => updateService(service.id, 'image', e.target.value)}
-                            className="flex-1 px-3 py-2 rounded-lg border border-brand-dark/10 focus:border-brand-gold outline-none"
-                          />
-                          <img src={service.image} alt="Preview" className="w-10 h-10 rounded-lg object-cover" />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                      ))}
+                    </SortableContext>
+                  </DndContext>
                 </div>
               </div>
             )}
@@ -784,6 +791,103 @@ export default function HomepageEditor() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function SortableServiceItem({ 
+  service, 
+  updateService, 
+  deleteService 
+}: { 
+  key?: string;
+  service: Service; 
+  updateService: (id: string, field: keyof Service, value: string) => void;
+  deleteService: (id: string) => void;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id: service.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 1 : 0,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div 
+      ref={setNodeRef} 
+      style={style} 
+      className={`p-6 rounded-2xl border border-brand-dark/10 bg-brand-beige/10 group relative ${isDragging ? 'shadow-2xl ring-2 ring-brand-gold' : ''}`}
+    >
+      <div className="flex items-start gap-4">
+        <div 
+          {...attributes} 
+          {...listeners}
+          className="mt-8 cursor-grab active:cursor-grabbing p-2 text-brand-dark/20 hover:text-brand-gold transition-colors"
+        >
+          <GripVertical size={20} />
+        </div>
+        
+        <div className="flex-1">
+          <div className="flex justify-between items-start mb-4">
+            <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-brand-dark/40 mb-1 uppercase">Title</label>
+                <input 
+                  type="text" 
+                  value={service.title}
+                  onChange={(e) => updateService(service.id, 'title', e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-brand-dark/10 focus:border-brand-gold outline-none bg-white"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-brand-dark/40 mb-1 uppercase">Price</label>
+                <input 
+                  type="text" 
+                  value={service.price}
+                  onChange={(e) => updateService(service.id, 'price', e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-brand-dark/10 focus:border-brand-gold outline-none bg-white"
+                />
+              </div>
+            </div>
+            <button 
+              onClick={() => deleteService(service.id)}
+              className="ml-4 p-2 text-red-500 hover:bg-red-50 rounded-lg transition-all"
+            >
+              <Trash2 size={18} />
+            </button>
+          </div>
+          <div className="mb-4">
+            <label className="block text-xs font-bold text-brand-dark/40 mb-1 uppercase">Description</label>
+            <textarea 
+              value={service.description}
+              onChange={(e) => updateService(service.id, 'description', e.target.value)}
+              rows={2}
+              className="w-full px-3 py-2 rounded-lg border border-brand-dark/10 focus:border-brand-gold outline-none bg-white"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-brand-dark/40 mb-1 uppercase">Image URL</label>
+            <div className="flex gap-3">
+              <input 
+                type="text" 
+                value={service.image}
+                onChange={(e) => updateService(service.id, 'image', e.target.value)}
+                className="flex-1 px-3 py-2 rounded-lg border border-brand-dark/10 focus:border-brand-gold outline-none bg-white"
+              />
+              <img src={service.image} alt="Preview" className="w-10 h-10 rounded-lg object-cover" />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -3,7 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
+    <title>Kavya Beauty Parlour</title>
+    <script>
+      // Protection against polyfills trying to overwrite read-only window.fetch
+      (function() {
+        const nativeFetch = window.fetch;
+        Object.defineProperty(window, 'fetch', {
+          get: function() { return nativeFetch; },
+          set: function() { console.warn('Attempted to overwrite window.fetch'); },
+          configurable: false
+        });
+        window.global = window;
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

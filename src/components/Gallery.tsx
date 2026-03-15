@@ -1,46 +1,11 @@
 import React from 'react';
 import { motion } from 'motion/react';
-
-const galleryItems = [
-  {
-    id: 1,
-    title: 'Bridal Transformation',
-    image: 'https://images.unsplash.com/photo-1594465919760-441fe5908ab0?auto=format&fit=crop&q=80&w=600',
-    category: 'Makeup'
-  },
-  {
-    id: 2,
-    title: 'Hair Styling',
-    image: 'https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&q=80&w=600',
-    category: 'Hair'
-  },
-  {
-    id: 3,
-    title: 'Skin Glow',
-    image: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&q=80&w=600',
-    category: 'Skincare'
-  },
-  {
-    id: 4,
-    title: 'Party Look',
-    image: 'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&q=80&w=600',
-    category: 'Makeup'
-  },
-  {
-    id: 5,
-    title: 'Bridal Mehndi',
-    image: 'https://images.unsplash.com/photo-1560750588-73207b1ef5b8?auto=format&fit=crop&q=80&w=600',
-    category: 'Traditional'
-  },
-  {
-    id: 6,
-    title: 'Hair Coloring',
-    image: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&q=80&w=600',
-    category: 'Hair'
-  }
-];
+import { useContentStore } from '../contentStore';
 
 export default function Gallery() {
+  const { content } = useContentStore();
+  const { gallery } = content;
+
   return (
     <section id="gallery" className="py-24 bg-white">
       <div className="container mx-auto px-4">
@@ -52,7 +17,7 @@ export default function Gallery() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-          {galleryItems.map((item, index) => (
+          {gallery.map((item, index) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, y: 20 }}

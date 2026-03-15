@@ -1,68 +1,12 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Service } from '../types';
 import { Calendar } from 'lucide-react';
-
-const services: Service[] = [
-  {
-    id: '1',
-    title: 'Bridal Makeup',
-    description: 'Exquisite bridal looks for your special day, from traditional to contemporary.',
-    price: 'Starting ₹5,000',
-    image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=600',
-  },
-  {
-    id: '2',
-    title: 'Party Makeup',
-    description: 'Stunning makeup for parties, events, and special occasions.',
-    price: 'Starting ₹1,500',
-    image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=600',
-  },
-  {
-    id: '3',
-    title: 'Hair Cut & Styling',
-    description: 'Professional hair cuts and styling to match your personality.',
-    price: 'Starting ₹300',
-    image: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&q=80&w=600',
-  },
-  {
-    id: '4',
-    title: 'Hair Smoothening',
-    description: 'Get silky, smooth, and frizz-free hair with our premium treatments.',
-    price: 'Starting ₹3,000',
-    image: 'https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&q=80&w=600',
-  },
-  {
-    id: '5',
-    title: 'Facial & Skin Care',
-    description: 'Rejuvenating facials for a natural, healthy glow.',
-    price: 'Starting ₹800',
-    image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&q=80&w=600',
-  },
-  {
-    id: '6',
-    title: 'Waxing & Threading',
-    description: 'Hygienic and professional waxing and threading services.',
-    price: 'Starting ₹50',
-    image: 'https://images.unsplash.com/photo-1559599101-f09722fb4948?auto=format&fit=crop&q=80&w=600',
-  },
-  {
-    id: '7',
-    title: 'Manicure & Pedicure',
-    description: 'Pamper your hands and feet with our relaxing spa treatments.',
-    price: 'Starting ₹500',
-    image: 'https://images.unsplash.com/photo-1610992015732-2449b0c26670?auto=format&fit=crop&q=80&w=600',
-  },
-  {
-    id: '8',
-    title: 'Hair Coloring',
-    description: 'Trendy hair colors and highlights using premium products.',
-    price: 'Starting ₹1,200',
-    image: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&q=80&w=600',
-  },
-];
+import { useContentStore } from '../contentStore';
 
 export default function Services() {
+  const { content } = useContentStore();
+  const { services } = content;
+
   return (
     <section id="services" className="py-24 bg-white">
       <div className="container mx-auto px-4">

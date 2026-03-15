@@ -1,3 +1,50 @@
+export interface HomepageContent {
+  hero: {
+    salonName: string;
+    heading: string;
+    subheading: string;
+    backgroundImage: string;
+    buttonText: string;
+  };
+  services: Service[];
+  about: {
+    title: string;
+    description: string;
+    image: string;
+  };
+  gallery: GalleryItem[];
+  reviews: Review[];
+  offer: {
+    title: string;
+    description: string;
+    discount: string;
+    image: string;
+    isActive: boolean;
+  };
+  features: {
+    title: string;
+    description: string;
+    items: {
+      id: string;
+      title: string;
+      description: string;
+      icon: string;
+    }[];
+  };
+  contact: {
+    address: string;
+    phone: string;
+    whatsapp: string;
+    hours: string;
+    mapLink: string;
+  };
+  seo: {
+    metaTitle: string;
+    metaDescription: string;
+    keywords: string;
+  };
+}
+
 export type BookingStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
 
 export interface Booking {
@@ -18,6 +65,13 @@ export interface Service {
   description: string;
   price: string;
   image: string;
+}
+
+export interface GalleryItem {
+  id: string;
+  title: string;
+  image: string;
+  category: string;
 }
 
 export interface Review {

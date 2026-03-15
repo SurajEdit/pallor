@@ -18,7 +18,8 @@ import {
   Trash2,
   Phone,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Globe
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { format, isToday, isSameDay, parseISO, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, addMonths, subMonths } from 'date-fns';
@@ -26,6 +27,7 @@ import { useBookingStore } from '../bookingStore';
 import { Booking, BookingStatus } from '../types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import HomepageEditor from './HomepageEditor';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -33,7 +35,7 @@ function cn(...inputs: ClassValue[]) {
 
 export default function AdminDashboard() {
   const { bookings, updateBooking, deleteBooking } = useBookingStore();
-  const [activeTab, setActiveTab] = useState<'list' | 'calendar'>('list');
+  const [activeTab, setActiveTab] = useState<'list' | 'calendar' | 'content'>('list');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<BookingStatus | 'all'>('all');
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
@@ -106,6 +108,26 @@ export default function AdminDashboard() {
             <CalendarIcon size={20} />
             Calendar
           </button>
+
+          <div className="pt-4 pb-2 px-4">
+            <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Website Content</span>
+          </div>
+          
+          <button 
+            onClick={() => setActiveTab('content')}
+            className={cn(
+              "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all",
+              activeTab === 'content' ? "bg-brand-gold text-white" : "hover:bg-white/10 text-white/60"
+            )}
+          >
+            <Globe size={20} />
+            Homepage Editor
+          </button>
+
+          <div className="pt-4 pb-2 px-4">
+            <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">System</span>
+          </div>
+
           <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:bg-white/10">
             <Users size={20} />
             Customers
@@ -129,27 +151,29 @@ export default function AdminDashboard() {
         {/* Header */}
         <header className="bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center shrink-0">
           <h1 className="text-2xl font-bold text-gray-800">
-            {activeTab === 'list' ? 'Booking Management' : 'Appointment Calendar'}
+            {activeTab === 'list' ? 'Booking Management' : activeTab === 'calendar' ? 'Appointment Calendar' : 'Website Content Editor'}
           </h1>
-          <div className="flex items-center gap-4">
-            <div className="relative hidden md:block">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-              <input 
-                type="text" 
-                placeholder="Search bookings..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 bg-gray-100 border-transparent focus:bg-white focus:border-brand-gold rounded-xl outline-none transition-all w-64"
-              />
+          {activeTab !== 'content' && (
+            <div className="flex items-center gap-4">
+              <div className="relative hidden md:block">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <input 
+                  type="text" 
+                  placeholder="Search bookings..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 pr-4 py-2 bg-gray-100 border-transparent focus:bg-white focus:border-brand-gold rounded-xl outline-none transition-all w-64"
+                />
+              </div>
+              <button 
+                onClick={handleExport}
+                className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-xl hover:bg-gray-50 transition-all text-sm font-medium"
+              >
+                <Download size={18} />
+                Export
+              </button>
             </div>
-            <button 
-              onClick={handleExport}
-              className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-xl hover:bg-gray-50 transition-all text-sm font-medium"
-            >
-              <Download size={18} />
-              Export
-            </button>
-          </div>
+          )}
         </header>
 
         {/* Scrollable Area */}
@@ -248,8 +272,10 @@ export default function AdminDashboard() {
                 )}
               </div>
             </div>
-          ) : (
+          ) : activeTab === 'calendar' ? (
             <CalendarView bookings={bookings} />
+          ) : (
+            <HomepageEditor />
           )}
         </div>
       </main>

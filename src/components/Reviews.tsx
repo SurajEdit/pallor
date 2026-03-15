@@ -1,32 +1,12 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Star, Quote } from 'lucide-react';
-
-const reviews = [
-  {
-    id: 1,
-    name: "Priya Sharma",
-    rating: 5,
-    comment: "Best beauty parlour in Badarpur. Staff is very professional and makeup quality is amazing. I got my bridal makeup done here and everyone loved it!",
-    date: "2 weeks ago"
-  },
-  {
-    id: 2,
-    name: "Anjali Singh",
-    rating: 5,
-    comment: "Very clean salon and affordable prices. The hair smoothening treatment I got was perfect. Highly recommended!",
-    date: "1 month ago"
-  },
-  {
-    id: 3,
-    name: "Meena Kumari",
-    rating: 5,
-    comment: "Excellent service! The facial gave me a wonderful glow. The beauticians are very polite and expert in their work.",
-    date: "3 weeks ago"
-  }
-];
+import { useContentStore } from '../contentStore';
 
 export default function Reviews() {
+  const { content } = useContentStore();
+  const { reviews } = content;
+
   return (
     <section id="reviews" className="py-24 bg-brand-pink overflow-hidden">
       <div className="container mx-auto px-4">

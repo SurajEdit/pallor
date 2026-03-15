@@ -1,14 +1,18 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Phone, Calendar, MessageCircle, Star } from 'lucide-react';
+import { useContentStore } from '../contentStore';
 
 export default function Hero() {
+  const { content } = useContentStore();
+  const { hero } = content;
+
   return (
     <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 z-0">
         <img 
-          src="https://images.unsplash.com/photo-1560750588-73207b1ef5b8?auto=format&fit=crop&q=80&w=2000" 
+          src={hero.backgroundImage} 
           alt="Beauty Salon Background" 
           className="w-full h-full object-cover opacity-20"
           referrerPolicy="no-referrer"
@@ -35,12 +39,13 @@ export default function Hero() {
             </div>
 
             <h1 className="text-5xl md:text-7xl font-serif font-bold text-brand-dark leading-tight mb-6">
-              Best Beauty Parlour in <span className="text-brand-gold">Badarpur</span>
+              {hero.heading.split(' ').map((word, i) => (
+                <span key={i} className={word === 'Badarpur' ? 'text-brand-gold' : ''}>{word} </span>
+              ))}
             </h1>
             
             <p className="text-lg md:text-xl text-brand-dark/80 mb-10 leading-relaxed max-w-2xl">
-              Professional makeup, skincare, and hair services trusted by 258+ happy customers. 
-              Experience luxury beauty treatments tailored just for you.
+              {hero.subheading}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
@@ -49,17 +54,17 @@ export default function Hero() {
                 className="bg-brand-gold text-white px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2"
               >
                 <Calendar size={20} />
-                Book Appointment
+                {hero.buttonText}
               </a>
               <a 
-                href="tel:+917836981845" 
+                href={`tel:${content.contact.phone}`} 
                 className="bg-white text-brand-dark border-2 border-brand-gold/20 px-8 py-4 rounded-full font-bold text-lg hover:bg-brand-gold hover:text-white transition-all flex items-center justify-center gap-2"
               >
                 <Phone size={20} />
                 Call Now
               </a>
               <a 
-                href="https://wa.me/917836981845" 
+                href={`https://wa.me/${content.contact.whatsapp}`} 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-[#25D366] text-white px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2"

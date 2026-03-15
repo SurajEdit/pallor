@@ -1,8 +1,12 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { MapPin, Phone, Navigation, Clock } from 'lucide-react';
+import { useContentStore } from '../contentStore';
 
 export default function Location() {
+  const { content } = useContentStore();
+  const { contact } = content;
+
   return (
     <section id="location" className="py-24 bg-brand-pink">
       <div className="container mx-auto px-4">
@@ -23,8 +27,7 @@ export default function Location() {
                   <div>
                     <h3 className="text-xl font-bold mb-1">Our Address</h3>
                     <p className="text-brand-dark/70 leading-relaxed">
-                      E-422 Khadda Colony, Part-2, Jaitpur Extension,<br />
-                      Badarpur, New Delhi, Delhi 110044
+                      {contact.address}
                     </p>
                   </div>
                 </div>
@@ -36,7 +39,7 @@ export default function Location() {
                   <div>
                     <h3 className="text-xl font-bold mb-1">Opening Hours</h3>
                     <p className="text-brand-dark/70 leading-relaxed">
-                      Mon - Sun: 10:00 AM - 08:30 PM
+                      {contact.hours}
                     </p>
                   </div>
                 </div>
@@ -48,7 +51,7 @@ export default function Location() {
                   <div>
                     <h3 className="text-xl font-bold mb-1">Call Us</h3>
                     <p className="text-brand-dark/70 leading-relaxed">
-                      +91 78369 81845
+                      {contact.phone}
                     </p>
                   </div>
                 </div>
@@ -56,7 +59,7 @@ export default function Location() {
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <a 
-                  href="https://www.google.com/maps/dir/?api=1&destination=Kavya+Beauty+Parlour+Badarpur" 
+                  href={contact.mapLink} 
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-brand-gold text-white px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
@@ -65,7 +68,7 @@ export default function Location() {
                   Get Directions
                 </a>
                 <a 
-                  href="tel:+917836981845" 
+                  href={`tel:${contact.phone}`} 
                   className="bg-white text-brand-dark border-2 border-brand-gold/20 px-8 py-4 rounded-full font-bold hover:bg-brand-gold hover:text-white transition-all flex items-center justify-center gap-2"
                 >
                   <Phone size={20} />
@@ -76,7 +79,6 @@ export default function Location() {
           </div>
 
           <div className="lg:w-1/2 w-full h-[450px] rounded-[40px] overflow-hidden shadow-2xl border-8 border-white">
-            {/* Embedded Google Map Placeholder - In real app, use Google Maps API or Iframe */}
             <iframe 
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3505.58123456789!2d77.3123456789!3d28.5123456789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce6543210:0x1234567890abcdef!2sKavya+Beauty+Parlour!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin" 
               width="100%" 

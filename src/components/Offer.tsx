@@ -1,8 +1,14 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Sparkles, Calendar } from 'lucide-react';
+import { useContentStore } from '../contentStore';
 
 export default function Offer() {
+  const { content } = useContentStore();
+  const { offer } = content;
+
+  if (!offer.isActive) return null;
+
   return (
     <section className="py-16">
       <div className="container mx-auto px-4">
@@ -23,12 +29,11 @@ export default function Offer() {
             </div>
             
             <h2 className="text-4xl md:text-6xl font-serif font-bold text-white mb-6">
-              20% OFF on Facial & Hair Services
+              {offer.title}
             </h2>
             
             <p className="text-white/90 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
-              Book your appointment today and get a special discount on our premium skin and hair treatments. 
-              Valid for first-time customers!
+              {offer.description}
             </p>
 
             <a 
@@ -36,7 +41,7 @@ export default function Offer() {
               className="inline-flex items-center gap-2 bg-white text-brand-gold px-10 py-5 rounded-full font-bold text-xl shadow-xl hover:scale-105 transition-all"
             >
               <Calendar size={24} />
-              Book Appointment Now
+              Claim Offer Now
             </a>
           </div>
         </motion.div>

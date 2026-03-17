@@ -82,7 +82,7 @@ export default function AdminDashboard() {
       <aside className="w-64 bg-brand-dark text-white hidden lg:flex flex-col">
         <div className="p-8">
           <div className="flex flex-col">
-            <span className="text-2xl font-serif font-bold text-brand-gold tracking-wider uppercase">Kavya</span>
+            <span className="text-2xl font-serif font-bold text-brand-gold tracking-wider uppercase">Strivenii</span>
             <span className="text-[10px] tracking-[0.3em] uppercase opacity-60 -mt-1">Admin Panel</span>
           </div>
         </div>

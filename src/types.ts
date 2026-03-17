@@ -5,12 +5,16 @@ export interface HomepageContent {
     subheading: string;
     backgroundImage: string;
     buttonText: string;
+    buttonLink: string;
   };
   services: Service[];
   about: {
     title: string;
     description: string;
     image: string;
+    mission: string;
+    vision: string;
+    hygiene: string;
   };
   gallery: GalleryItem[];
   reviews: Review[];
@@ -20,6 +24,12 @@ export interface HomepageContent {
     discount: string;
     image: string;
     isActive: boolean;
+  };
+  cta: {
+    heading: string;
+    description: string;
+    buttonText: string;
+    buttonLink: string;
   };
   features: {
     title: string;
@@ -37,12 +47,14 @@ export interface HomepageContent {
     whatsapp: string;
     hours: string;
     mapLink: string;
+    email: string;
   };
   seo: {
     metaTitle: string;
     metaDescription: string;
     keywords: string;
   };
+  blogs: BlogPost[];
 }
 
 export type BookingStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
@@ -65,13 +77,15 @@ export interface Service {
   description: string;
   price: string;
   image: string;
+  duration: string;
+  category: 'Hair' | 'Beauty' | 'Skin';
 }
 
 export interface GalleryItem {
   id: string;
   title: string;
   image: string;
-  category: string;
+  category: 'Interior' | 'Hair' | 'Beauty' | 'Bridal';
 }
 
 export interface Review {
@@ -82,8 +96,12 @@ export interface Review {
   date: string;
 }
 
-export interface Feature {
+export interface BlogPost {
   id: string;
   title: string;
-  icon: string;
+  excerpt: string;
+  content: string;
+  image: string;
+  date: string;
+  author: string;
 }

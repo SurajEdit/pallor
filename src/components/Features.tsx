@@ -1,46 +1,69 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Star, Users, Award, ShieldCheck, Zap, Sparkles } from 'lucide-react';
-import { useContentStore } from '../contentStore';
+import { ShieldCheck, Sparkles, Award, Heart, Clock, Leaf } from 'lucide-react';
 
-const iconMap: Record<string, React.ReactNode> = {
-  Star: <Star className="text-brand-gold" size={32} />,
-  Users: <Users className="text-brand-gold" size={32} />,
-  Award: <Award className="text-brand-gold" size={32} />,
-  ShieldCheck: <ShieldCheck className="text-brand-gold" size={32} />,
-  Zap: <Zap className="text-brand-gold" size={32} />,
-  Sparkles: <Sparkles className="text-brand-gold" size={32} />,
-};
+const features = [
+  {
+    icon: ShieldCheck,
+    title: "Certified Experts",
+    description: "Our therapists are internationally certified with years of experience in luxury wellness."
+  },
+  {
+    icon: Sparkles,
+    title: "Premium Products",
+    description: "We exclusively use high-end, organic products from world-renowned beauty brands."
+  },
+  {
+    icon: Award,
+    title: "Award Winning",
+    description: "Recognized as one of Mumbai's top-rated spa and salon destinations since 2015."
+  },
+  {
+    icon: Heart,
+    title: "Personalized Care",
+    description: "Every treatment is tailored to your unique skin type and wellness goals."
+  },
+  {
+    icon: Clock,
+    title: "Flexible Hours",
+    description: "Open 7 days a week to accommodate your busy lifestyle and self-care needs."
+  },
+  {
+    icon: Leaf,
+    title: "Eco-Friendly",
+    description: "Committed to sustainability with zero-waste practices and natural treatments."
+  }
+];
 
 export default function Features() {
-  const { content } = useContentStore();
-  const { title, description, items } = content.features;
-
   return (
-    <section className="py-24 bg-brand-pink">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4">{title}</h2>
-          <p className="text-brand-dark/60 max-w-2xl mx-auto">
-            {description}
+    <section className="py-24 bg-white overflow-hidden">
+      <div className="container mx-auto px-6">
+        <div className="text-center max-w-3xl mx-auto mb-20">
+          <span className="text-[10px] uppercase tracking-[0.5em] text-brand-gold font-bold mb-4 block">
+            Why Choose Us
+          </span>
+          <h2 className="text-4xl md:text-6xl font-display mb-6">The Strivenii Difference</h2>
+          <p className="text-brand-brown/60 font-light leading-relaxed">
+            We combine ancient wisdom with modern technology to provide an unparalleled wellness experience that rejuvenates your body, mind, and soul.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {items.map((feature, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+          {features.map((feature, index) => (
             <motion.div
-              key={feature.id}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white p-8 rounded-3xl shadow-sm hover:shadow-md transition-shadow border border-brand-gold/10"
+              viewport={{ once: true }}
+              className="group p-10 rounded-[2.5rem] bg-brand-soft hover:bg-brand-dark transition-all duration-500 luxury-shadow"
             >
-              <div className="mb-6 bg-brand-pink w-16 h-16 rounded-2xl flex items-center justify-center">
-                {iconMap[feature.icon] || <Sparkles className="text-brand-gold" size={32} />}
+              <div className="w-16 h-16 rounded-2xl bg-white flex items-center justify-center text-brand-gold mb-8 group-hover:bg-brand-gold group-hover:text-white transition-all duration-500 luxury-shadow">
+                <feature.icon size={28} />
               </div>
-              <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-              <p className="text-brand-dark/70 leading-relaxed">
+              <h3 className="text-2xl font-display mb-4 group-hover:text-white transition-colors">{feature.title}</h3>
+              <p className="text-brand-brown/60 font-light leading-relaxed group-hover:text-white/60 transition-colors">
                 {feature.description}
               </p>
             </motion.div>

@@ -85,6 +85,13 @@ export default function HomepageEditor() {
     });
   };
 
+  const updateCTA = (field: keyof HomepageContent['cta'], value: string) => {
+    setLocalContent({
+      ...localContent,
+      cta: { ...localContent.cta, [field]: value }
+    });
+  };
+
   const updateFeatures = (field: keyof HomepageContent['features'], value: any) => {
     setLocalContent({
       ...localContent,
@@ -116,6 +123,8 @@ export default function HomepageEditor() {
       title: 'New Service',
       description: 'Service description',
       price: '₹0',
+      duration: '60 min',
+      category: 'Hair',
       image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=600'
     };
     setLocalContent({
@@ -144,7 +153,7 @@ export default function HomepageEditor() {
       id: Date.now().toString(),
       title: 'New Image',
       image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=600',
-      category: 'General'
+      category: 'Hair'
     };
     setLocalContent({
       ...localContent,
@@ -195,6 +204,26 @@ export default function HomepageEditor() {
     });
   };
 
+  const handleImageUpload = (id: string, e: React.ChangeEvent<HTMLInputElement>, section: 'gallery' | 'hero' | 'services' | 'about') => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        if (section === 'gallery') {
+          updateGalleryItem(id, 'image', base64String);
+        } else if (section === 'hero') {
+          updateHero('backgroundImage', base64String);
+        } else if (section === 'services') {
+          updateService(id, 'image', base64String);
+        } else if (section === 'about') {
+          updateAbout('image', base64String);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -227,6 +256,7 @@ export default function HomepageEditor() {
     { id: 'reviews', label: 'Reviews', icon: Star },
     { id: 'offer', label: 'Offers', icon: Tag },
     { id: 'contact', label: 'Contact', icon: Phone },
+    { id: 'cta', label: 'CTA Section', icon: Layout },
     { id: 'seo', label: 'SEO Settings', icon: Search },
   ];
 
@@ -329,6 +359,15 @@ export default function HomepageEditor() {
                       type="text" 
                       value={localContent.hero.buttonText}
                       onChange={(e) => updateHero('buttonText', e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl border border-brand-dark/10 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 outline-none transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-brand-dark/60 mb-2 uppercase tracking-wider">Button Link</label>
+                    <input 
+                      type="text" 
+                      value={localContent.hero.buttonLink}
+                      onChange={(e) => updateHero('buttonLink', e.target.value)}
                       className="w-full px-4 py-3 rounded-xl border border-brand-dark/10 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 outline-none transition-all"
                     />
                   </div>
@@ -528,6 +567,19 @@ export default function HomepageEditor() {
                             onChange={(e) => updateGalleryItem(item.id, 'image', e.target.value)}
                             className="w-full text-xs text-brand-dark/40 bg-transparent outline-none border-b border-transparent focus:border-brand-gold truncate"
                           />
+                          <div className="flex items-center gap-4 mt-2">
+                            <label className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-brand-dark text-white text-[10px] font-bold uppercase tracking-widest cursor-pointer hover:bg-brand-gold transition-all">
+                              <ImageIcon size={12} />
+                              Upload Image
+                              <input 
+                                type="file" 
+                                className="hidden" 
+                                accept="image/*"
+                                onChange={(e) => handleImageUpload(item.id, e, 'gallery')}
+                              />
+                            </label>
+                            <span className="text-[10px] text-brand-dark/30 font-medium">or paste URL above</span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -703,6 +755,61 @@ export default function HomepageEditor() {
                       onChange={(e) => updateContact('mapLink', e.target.value)}
                       className="w-full px-4 py-3 rounded-xl border border-brand-dark/10 outline-none"
                     />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-brand-dark/60 mb-2 uppercase tracking-wider">Email Address</label>
+                    <input 
+                      type="email" 
+                      value={localContent.contact.email}
+                      onChange={(e) => updateContact('email', e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl border border-brand-dark/10 outline-none"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'cta' && (
+              <div className="space-y-6">
+                <h2 className="text-xl font-bold mb-4">Call to Action Section</h2>
+                <div className="grid grid-cols-1 gap-6">
+                  <div>
+                    <label className="block text-sm font-bold text-brand-dark/60 mb-2 uppercase tracking-wider">Heading</label>
+                    <input 
+                      type="text" 
+                      value={localContent.cta.heading}
+                      onChange={(e) => updateCTA('heading', e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl border border-brand-dark/10 outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-brand-dark/60 mb-2 uppercase tracking-wider">Description</label>
+                    <textarea 
+                      value={localContent.cta.description}
+                      onChange={(e) => updateCTA('description', e.target.value)}
+                      rows={3}
+                      className="w-full px-4 py-3 rounded-xl border border-brand-dark/10 outline-none"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-bold text-brand-dark/60 mb-2 uppercase tracking-wider">Button Text</label>
+                      <input 
+                        type="text" 
+                        value={localContent.cta.buttonText}
+                        onChange={(e) => updateCTA('buttonText', e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl border border-brand-dark/10 outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-bold text-brand-dark/60 mb-2 uppercase tracking-wider">Button Link</label>
+                      <input 
+                        type="text" 
+                        value={localContent.cta.buttonLink}
+                        onChange={(e) => updateCTA('buttonLink', e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl border border-brand-dark/10 outline-none"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

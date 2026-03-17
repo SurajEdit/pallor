@@ -1,63 +1,75 @@
 import { useState, useEffect } from 'react';
 import { HomepageContent } from './types';
 
-const CONTENT_STORAGE_KEY = 'kavya_homepage_content';
+const CONTENT_STORAGE_KEY = 'strivenii_homepage_content';
 
 const defaultContent: HomepageContent = {
   hero: {
-    salonName: 'Kavya',
-    heading: 'Best Beauty Parlour in Badarpur',
-    subheading: 'Professional makeup, skincare, and hair services trusted by 258+ happy customers. Experience luxury beauty treatments tailored just for you.',
-    backgroundImage: 'https://images.unsplash.com/photo-1560750588-73207b1ef5b8?auto=format&fit=crop&q=80&w=2000',
-    buttonText: 'Book Appointment'
+    salonName: 'Strivenii Hair and Beauty Salon',
+    heading: 'Best Beauty Salon in Badarpur',
+    subheading: 'Professional beauty services with 4.9⭐ rating. Your destination for exquisite bridal makeup and luxury hair care in Badarpur.',
+    backgroundImage: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=2000',
+    buttonText: 'Book Your Transformation',
+    buttonLink: '/booking'
   },
   services: [
     {
       id: '1',
-      title: 'Bridal Makeup',
-      description: 'Exquisite bridal looks for your special day, from traditional to contemporary.',
-      price: 'Starting ₹5,000',
-      image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=600',
+      title: 'Advanced Hair Styling',
+      description: 'From precision cuts to vibrant coloring, our stylists create looks that define your personality.',
+      price: '₹800',
+      duration: '45 mins',
+      category: 'Hair',
+      image: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&q=80&w=600',
     },
     {
       id: '2',
-      title: 'Party Makeup',
-      description: 'Stunning makeup for parties, events, and special occasions.',
-      price: 'Starting ₹1,500',
+      title: 'Luxury Bridal Makeup',
+      description: 'Exquisite bridal artistry tailored for your special day using premium international brands.',
+      price: '₹15,000',
+      duration: '180 mins',
+      category: 'Beauty',
       image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=600',
     },
     {
       id: '3',
-      title: 'Hair Cut & Styling',
-      description: 'Professional hair cuts and styling to match your personality.',
-      price: 'Starting ₹300',
-      image: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&q=80&w=600',
+      title: 'Skin Rejuvenation Facial',
+      description: 'Deep cleansing and hydration treatments to restore your skin\'s natural glow.',
+      price: '₹2,500',
+      duration: '60 mins',
+      category: 'Skin',
+      image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&q=80&w=600',
     },
     {
       id: '4',
-      title: 'Hair Smoothening',
-      description: 'Get silky, smooth, and frizz-free hair with our premium treatments.',
-      price: 'Starting ₹3,000',
-      image: 'https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&q=80&w=600',
+      title: 'Hair Smoothening & Keratin',
+      description: 'Transform frizzy hair into silky smooth locks with our professional keratin treatments.',
+      price: '₹4,500',
+      duration: '120 mins',
+      category: 'Hair',
+      image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=600',
     }
   ],
   about: {
-    title: 'Why Choose Kavya Beauty Parlour',
-    description: 'We combine expertise with luxury to provide an unmatched salon experience.',
-    image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=1000'
+    title: 'Strivenii: Where Beauty Meets Excellence',
+    description: 'Strivenii Hair and Beauty Salon is a top-rated beauty destination in Badarpur, Delhi. With over 15 years of experience, we specialize in bridal makeup, advanced hair styling, and skin rejuvenation treatments.',
+    image: 'https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&q=80&w=1000',
+    mission: 'To empower our clients by enhancing their natural beauty through expert care and premium services.',
+    vision: 'To be the most preferred hair and beauty sanctuary in Badarpur, recognized for innovation and client satisfaction.',
+    hygiene: 'Your safety is our priority. We follow strict sterilization protocols and use disposable kits for all skin treatments.'
   },
   gallery: [
     {
       id: '1',
-      title: 'Bridal Transformation',
-      image: 'https://images.unsplash.com/photo-1594465919760-441fe5908ab0?auto=format&fit=crop&q=80&w=600',
-      category: 'Makeup'
+      title: 'Modern Salon Interior',
+      image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=600',
+      category: 'Interior'
     },
     {
       id: '2',
-      title: 'Hair Styling',
-      image: 'https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&q=80&w=600',
-      category: 'Hair'
+      title: 'Bridal Transformation',
+      image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=600',
+      category: 'Bridal'
     }
   ],
   reviews: [
@@ -65,71 +77,78 @@ const defaultContent: HomepageContent = {
       id: '1',
       name: 'Priya Sharma',
       rating: 5,
-      comment: 'Best beauty parlour in Badarpur. Staff is very professional and makeup quality is amazing.',
+      comment: 'Absolutely love the hair styling here! The staff is professional and the results are always amazing.',
       date: '2 weeks ago'
+    },
+    {
+      id: '2',
+      name: 'Anjali Gupta',
+      rating: 5,
+      comment: 'Best salon in Badarpur. Clean, hygienic, and very friendly staff. Highly recommended.',
+      date: '1 month ago'
     }
   ],
   offer: {
-    title: '20% OFF on Facial & Hair Services',
-    description: 'Book your appointment today and get a special discount on our premium skin and hair treatments.',
+    title: 'New Client Special',
+    description: 'Get 20% off on your first visit for any hair or skin service.',
     discount: '20% OFF',
     image: '',
     isActive: true
   },
+  cta: {
+    heading: 'Ready for Your Glow Up?',
+    description: 'Join hundreds of happy clients in Badarpur. Book your appointment today and experience the Strivenii magic.',
+    buttonText: 'Book Appointment Now',
+    buttonLink: '/booking'
+  },
   features: {
-    title: 'Why Choose Kavya Beauty Parlour',
-    description: 'We combine expertise with luxury to provide an unmatched salon experience.',
+    title: 'The Strivenii Standard',
+    description: 'Why clients trust us with their beauty needs in Badarpur.',
     items: [
       {
         id: '1',
-        title: '4.9 ⭐ Rated Salon',
-        description: 'Trusted by hundreds of happy customers in Badarpur.',
+        title: '4.9 Star Rated',
+        description: 'Highly recommended by our community for consistent quality.',
         icon: 'Star'
       },
       {
         id: '2',
-        title: 'Professional Beauticians',
-        description: 'Highly skilled experts with years of experience.',
+        title: 'Expert Stylists',
+        description: 'Our team stays updated with the latest global beauty trends.',
         icon: 'Users'
       },
       {
         id: '3',
-        title: 'Premium Products',
-        description: 'We use only top-tier, international beauty brands.',
+        title: 'Premium Brands',
+        description: 'We use only top-tier professional products for your hair and skin.',
         icon: 'Award'
-      },
-      {
-        id: '4',
-        title: 'Affordable Prices',
-        description: 'Luxury beauty services that fit your budget.',
-        icon: 'Zap'
-      },
-      {
-        id: '5',
-        title: 'Clean & Hygienic',
-        description: 'Strict sanitization protocols for your safety.',
-        icon: 'ShieldCheck'
-      },
-      {
-        id: '6',
-        title: 'Latest Techniques',
-        description: 'Always up-to-date with modern beauty trends.',
-        icon: 'Sparkles'
       }
     ]
   },
   contact: {
-    address: 'E-422 Khadda Colony, Part-2, Jaitpur Extension, Badarpur, New Delhi 110044',
-    phone: '+91 78369 81845',
-    whatsapp: '917836981845',
-    hours: 'Mon - Sun: 10:00 AM - 08:30 PM',
-    mapLink: 'https://www.google.com/maps/dir/?api=1&destination=Kavya+Beauty+Parlour+Badarpur'
+    address: 'Badarpur, New Delhi, Delhi 110044',
+    phone: '+91 98765 43210',
+    whatsapp: '919876543210',
+    hours: 'Mon - Sun: 10:00 AM - 8:00 PM',
+    mapLink: 'https://goo.gl/maps/example',
+    email: 'info@strivenii.com'
   },
   seo: {
-    metaTitle: 'Best Beauty Parlour in Badarpur | Kavya Beauty Parlour',
-    metaDescription: 'Kavya Beauty Parlour offers bridal makeup, hair styling, facials, and beauty services in Badarpur, New Delhi.',
-    keywords: 'best beauty salon Badarpur, bridal makeup Delhi, skincare services Badarpur, hair styling salon'
-  }
+    metaTitle: 'Strivenii Hair and Beauty Salon | Best Salon in Badarpur Delhi',
+    metaDescription: 'Strivenii Hair and Beauty Salon offers premium hair styling, bridal makeup, and skincare in Badarpur. 4.9-star rated salon in Delhi.',
+    keywords: 'Beauty Salon in Badarpur, Salon in Badarpur Delhi, Bridal Makeup Badarpur, Strivenii Hair and Beauty Salon'
+  },
+  blogs: [
+    {
+      id: '1',
+      title: 'Summer Hair Care Tips',
+      excerpt: 'Keep your hair healthy and hydrated during the Delhi summer with these expert tips.',
+      content: 'Full blog content here...',
+      image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=600',
+      date: '2024-03-15',
+      author: 'Strivenii Experts'
+    }
+  ]
 };
 
 export function useContentStore() {

@@ -66,5 +66,9 @@ export function useBookingStore() {
     setBookings(prev => prev.filter(b => b.id !== id));
   };
 
-  return { bookings, addBooking, updateBooking, deleteBooking };
+  const updateBookingStatus = (id: string, status: Booking['status']) => {
+    setBookings(prev => prev.map(b => b.id === id ? { ...b, status } : b));
+  };
+
+  return { bookings, addBooking, updateBooking, deleteBooking, updateBookingStatus };
 }

@@ -1,95 +1,97 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Phone, Calendar, MessageCircle, Star } from 'lucide-react';
+import { Phone, Calendar, MessageCircle, Star, ArrowRight } from 'lucide-react';
 import { useContentStore } from '../contentStore';
+import { Link } from 'react-router-dom';
 
 export default function Hero() {
   const { content } = useContentStore();
   const { hero } = content;
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      {/* Background Elements */}
+    <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-brand-beige">
+      {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img 
           src={hero.backgroundImage} 
-          alt="Beauty Salon Background" 
-          className="w-full h-full object-cover opacity-20"
+          alt="Luxury Spa Background" 
+          className="w-full h-full object-cover"
           referrerPolicy="no-referrer"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-pink via-brand-pink/80 to-transparent"></div>
+        <div className="absolute inset-0 bg-brand-dark/40"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-beige via-transparent to-transparent"></div>
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-3xl">
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="max-w-4xl mx-auto text-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 1, ease: "easeOut" }}
           >
-            <div className="flex items-center gap-2 mb-6">
+            <div className="flex items-center justify-center gap-3 mb-8">
+              <div className="h-[1px] w-12 bg-brand-gold/60"></div>
               <div className="flex text-brand-gold">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={18} fill="currentColor" />
+                  <Star key={i} size={14} fill="currentColor" />
                 ))}
               </div>
-              <span className="text-sm font-bold tracking-wider text-brand-dark/70">
-                4.9 GOOGLE RATING (258+ REVIEWS)
+              <span className="text-[10px] md:text-xs font-bold tracking-[0.3em] text-white/90 uppercase">
+                4.9 ⭐ (1,382+ GOOGLE REVIEWS)
               </span>
+              <div className="h-[1px] w-12 bg-brand-gold/60"></div>
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-serif font-bold text-brand-dark leading-tight mb-6">
-              {hero.heading.split(' ').map((word, i) => (
-                <span key={i} className={word === 'Badarpur' ? 'text-brand-gold' : ''}>{word} </span>
-              ))}
+            <h1 className="text-5xl md:text-8xl font-display text-white leading-[1.1] mb-8 text-balance">
+              {hero.heading}
             </h1>
             
-            <p className="text-lg md:text-xl text-brand-dark/80 mb-10 leading-relaxed max-w-2xl">
+            <p className="text-lg md:text-xl text-white/80 mb-12 leading-relaxed max-w-2xl mx-auto font-light tracking-wide">
               {hero.subheading}
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <a 
-                href="#booking" 
-                className="bg-brand-gold text-white px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2"
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+              <Link 
+                to={hero.buttonLink || "/book"} 
+                className="gold-gradient text-white px-10 py-5 rounded-full font-bold text-sm uppercase tracking-[0.2em] shadow-2xl hover:scale-105 transition-all flex items-center gap-3 group"
               >
-                <Calendar size={20} />
+                <Calendar size={18} />
                 {hero.buttonText}
-              </a>
-              <a 
-                href={`tel:${content.contact.phone}`} 
-                className="bg-white text-brand-dark border-2 border-brand-gold/20 px-8 py-4 rounded-full font-bold text-lg hover:bg-brand-gold hover:text-white transition-all flex items-center justify-center gap-2"
-              >
-                <Phone size={20} />
-                Call Now
-              </a>
-              <a 
-                href={`https://wa.me/${content.contact.whatsapp}`} 
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-[#25D366] text-white px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2"
-              >
-                <MessageCircle size={20} />
-                WhatsApp
-              </a>
+                <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+              </Link>
+              
+              <div className="flex items-center gap-4">
+                <a 
+                  href={`tel:${content.contact.phone}`} 
+                  className="w-14 h-14 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full flex items-center justify-center hover:bg-brand-gold hover:border-brand-gold transition-all shadow-xl"
+                  title="Call Us"
+                >
+                  <Phone size={20} />
+                </a>
+                <a 
+                  href={`https://wa.me/${content.contact.whatsapp}`} 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-14 h-14 bg-[#25D366]/20 backdrop-blur-md border border-[#25D366]/40 text-white rounded-full flex items-center justify-center hover:bg-[#25D366] transition-all shadow-xl"
+                  title="WhatsApp Us"
+                >
+                  <MessageCircle size={20} />
+                </a>
+              </div>
             </div>
           </motion.div>
         </div>
       </div>
 
-      {/* Decorative Image */}
+      {/* Scroll Indicator */}
       <motion.div 
-        initial={{ opacity: 0, x: 100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1, delay: 0.2 }}
-        className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 w-1/3 h-[80%] rounded-l-[100px] overflow-hidden shadow-2xl border-l-8 border-white"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5, duration: 1 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
       >
-        <img 
-          src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=1000" 
-          alt="Makeup Artist" 
-          className="w-full h-full object-cover"
-          referrerPolicy="no-referrer"
-        />
+        <span className="text-[10px] uppercase tracking-[0.4em] text-brand-dark/40 font-bold">Scroll</span>
+        <div className="w-[1px] h-12 bg-gradient-to-b from-brand-gold to-transparent"></div>
       </motion.div>
     </section>
   );
